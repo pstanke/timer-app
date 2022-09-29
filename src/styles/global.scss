@@ -1,0 +1,9 @@
+@import './settings.scss';
+
+body {
+  background: $color-dark;
+  font-size: $base-size;
+  color: $color-light;
+  justify-content: center;
+  display: flex;
+}
