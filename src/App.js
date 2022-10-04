@@ -3,27 +3,38 @@ import Button from './components/Button/Button';
 import { useState, useEffect } from 'react';
 const App = () => {
   const [time, setTime] = useState(0);
-  const [running, setRunning] = useState(false);
-
-  useEffect(() => {
-    let interval = null;
-
-    if (running) {
-      interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
-      }, 10);
-    } else if (!running) {
-      clearInterval(interval);
+  // const [running, setRunning] = useState(false);
+  const [timer, setTimer] = useState(null);
+  const start = () => {
+    if (!timer) {
+      setTimer(
+        setInterval(() => {
+          setTime((prevTime) => prevTime + 10);
+        }, 10)
+      );
     }
-    return () => clearInterval(interval);
-  }, [running]);
+  };
+  const stop = () => {
+    setTimer(clearInterval(timer));
+  };
+  const reset = () => {
+    setTime(0);
+    setTimer(clearInterval(timer));
+  };
+  useEffect(() => {
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, []);
 
   return (
     <div>
       <FormatedTime time={time} />
-      <Button onClick={() => setRunning(true)}>Start</Button>
-      <Button onClick={() => setRunning(false)}>Stop</Button>
-      <Button onClick={() => setTime(0)}>Reset</Button>
+      <Button onClick={start}>Start</Button>
+      <Button onClick={stop}>Stop</Button>
+      <Button onClick={reset}>Reset</Button>
     </div>
   );
 };
